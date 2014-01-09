@@ -1,0 +1,17 @@
+NVIDIA显卡驱动在COS下的安装方法(在兆芯开发板上集成进原始的LinuxMint镜像中)：
+0,切换root用户
+sudo su
+1,更改显卡驱动的执行权限：
+chmod 777 NVIDIA-Linux-x86-325.05.14.run
+2,禁用系统自带的nouveau驱动
+a,vim /etc/default/grub，找到 GRUB_CMDLINE_LINUX_DEFAULT这一行，将原来的
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"改为GRUB_CMDLINE_LINUX_DEFAULT="nouveau.blacklist=1 quiet splash"
+增加nouveau.blacklist=1
+b,更新grub
+update-grub2
+3,reboot，这时系统应进入无NVIDIA显卡驱动阶段
+4,禁用X server
+service mdm stop
+5,按ctrl+alt+F1，进入新的tty，切换到NVIDIA-Linux-x86-325.05.14.run文件的目录下，执行安装
+./NVIDIA-Linux-x86-325.05.14.run
+

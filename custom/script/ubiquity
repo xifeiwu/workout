@@ -1,0 +1,12 @@
+1、文字信息定制
+修改内容：将ubiquity中Linux Mint信息修改为COS Desktop信息，并修改版本信息。
+大部分文字信息修改：/usr/lib/ubiquity/ubiquity/misc.get_release中将Linux Mint改为COS Desktop
+分区中的文字信息修改：需要修改文字数据库/var/cache/debconf/templates.dat
+2、语言选择界面
+修改内容：将可选语言改为，中文简体，中文繁体，英文三类
+修改可选语言数据库：/usr/lib/ubiquity/localechooser/languagelist.data.gz
+当前语言及语言排序：/usr/lib/ubiquity/ubiquity/i18n.get_languages中的current_language属性，sorted方法中加入reverse=True。
+3、
+修改内容：
+相关文件夹：usr/share/ubiquity-slideshow
+
