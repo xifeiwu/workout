@@ -89,6 +89,26 @@ for dir in ${DIR[@]}; do
             error "file /home/cos/website/wiki/my_wiki.sql not found."
         fi
         ;;
+    "git/")
+        scp -r sil-10/ cos@192.168.160.10:~/backup
+        if [ $? -eq 0 ]; then
+           notice "Scp of directory sil-10 success."
+        else
+           warning "Scp of directory sil-10 fail."
+        fi
+        ssh ${REMOTE} 'cd /home/cos/backup/sil-10; sh auto-pull.sh; rm -rf /home/cos/backup/sil-10'
+        if [ $? -eq 0 ]; then
+           notice "Script of auto-pull.sh in sil-10 success."
+        else
+           warning "Script of auto-pull.sh in sil-10 fail."
+        fi        
+        log rsync -av --delete --delete-after --progress $FROM $TO
+        if [ $? -eq 0 ]; then
+           notice "Rsync of ${dir} success."
+        else
+           warning "Rsync of ${dir} fail."
+        fi
+        ;;
     *)
         log rsync -av --delete --delete-after --progress $FROM $TO
         if [ $? -eq 0 ]; then
