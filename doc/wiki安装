@@ -1,0 +1,23 @@
+wiki使用LAMP架构。
+deb些列发型版需要安装的包如下：
+sudo apt-get install apache2 php5 php5-mysql mysql-server
+一、mysql密码重置
+1.1 进入msqld_safe模式
+/etc/init.d/mysql stop (service mysqld stop )
+/usr/bin/mysqld_safe --skip-grant-tables
+1.2 使用root用户修改mysql的root密码
+另外开个SSH连接
+[root@localhost ~]# mysql
+mysql>use mysql
+mysql>update user set password=password("123456") where user="root";
+mysql>flush privileges;
+mysql>exit
+1.3 关闭之前运行的窗口
+用'ps aux | grep pts'查到你重置密码的SSH窗口。
+pkill -KILL -t pts/*，其中*为上指令查到的pts号
+1.4 开启mysql服务
+service mysql start
+二、PHP Fatal error:  Class 'DOMDocument' not found in /home/cos/website/wiki/includes/cache/LocalisationCache.php on line 587, referer: http://124.16.141.172/wiki/
+2.1、解决方案：
+yum install php-xml
+service httpd restart
