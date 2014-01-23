@@ -22,13 +22,13 @@ iptables -A OUTPUT -o lo -p all -j ACCEPT
 iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
 # Accept user-specified traffic
-iptables -A INPUT -i em1 -p tcp --dport 80 -j ACCEPT
-iptables -A INPUT -i em1 -p tcp --dport 81 -j ACCEPT
+iptables -A INPUT -i eth1 -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -i eth1 -p tcp --dport 81 -j ACCEPT
 
-iptables -A INPUT -i em2 -p tcp --dport 22 -j ACCEPT
-iptables -A INPUT -i em2 -p tcp --dport 80 -j ACCEPT
-iptables -A INPUT -i em2 -p tcp --dport 81 -j ACCEPT
-iptables -A INPUT -i em2 -p tcp --dport 3306 -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 81 -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 3306 -j ACCEPT
 # ping
 iptables -A INPUT -p icmp -m state --state ESTABLISHED,RELATED -j ACCEPT
-iptables -A INPUT -i em2 -p icmp -j ACCEPT
+iptables -A INPUT -i eth0 -p icmp -j ACCEPT
