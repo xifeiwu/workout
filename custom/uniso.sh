@@ -1,93 +1,71 @@
 #!/bin/sh
 set -e
 
+if [ -f ./assist.sh ]; then
+    source ./assist.sh
+else
+    echo -e "\033[2;31m-Bash file assist.sh not found.033[0m"
+    exit 1
+fi
 if [ "$USER" != "root" ] ; then
-    echo "error: you are not run as root user, you should excute sudo."
-    exit -1
+    error "You are not run as root user, you should excute sudo."
 fi
 
-if [ $# -eq 0 ] ; then
-    BASEPATH="/home/xifei/Public"
-    ORIGINISO="${BASEPATH}/OS-ISO/linuxmint-15-cinnamon-dvd-32bit.iso"
-    WORKDIR="${BASEPATH}/OS-Custom"
-    if [ ! -e ${ORIGINISO} ] ; then
-        echo "${ORIGINISO} does not exist."
-        exit -1
-    fi
-    if [ ! -e ${WORKDIR} ] ; then
-        mkdir -p ${WORKDIR}
-    fi
-elif [ $# -eq 2 ] ; then
-    ORIGINISO=$1
-    WORKDIR=$(cd $2; pwd)
+if [ ! -d ${BASEDIR}/distro ]; then
+    error "Directory ${BASEDIR}/distro is not found."
+fi
+cd ${BASEDIR}/distro
+DISTROS=(`ls | grep iso |sed -n 's:\(.*\)\.iso$:\1:p'`)
+DSIZE=${#DISTROS[@]}
+for ((i=0;i<${DSIZE};i++)); do
+    echo $i:${DISTROS[i]}
+done
+notice_read "Select the distro you want to custom:" num
+distro=${DISTROS[num]}
+if [ -z ${distro} ]; then
+    error "Correct your input."
+fi
+warning_read "Your selection: ${distro} [Y/n]?" yn
+while [ "${yn}" != "y" -a  "${yn}" != "Y" -a "${yn}" != "n" -a "${yn}" != "N" ]
+do
+    warning_read "Your selection: ${distro} [Y/n]" yn
+done
+if [ "${yn}" == "N" -o "${yn}" == "n" ] ; then
+    error "exit as you expected."
+fi
+
+cd ${BASEDIR}
+if [ ! -d dcustom ]; then
+    mkdir dcustom
+fi
+cd dcustom
+if [ ! -d ${distro} ]; then
+    mkdir ${distro}
+fi
+cd ${distro}
+if [ -d myiso ]; then
+    warning "Directory ${BASEDIR}/dcustom/${distro}/myiso has exist, and rsync is ignored."
 else
-    echo You should execute this script with two param at least as follow:
-    echo sh $0 ORIGINISO GENISODIR
-    exit -1
-fi
-
-if [ ! -f $1 ] ; then
-    echo You should make sure the iso $1 is a file that exists
-    exit -1
-fi
-
-if [ -e $2 ] ; then
-    if [ ! -d $2 ] ; then
-        echo You should make sure the genisodir $2 is a dir
-        exit -1
-    fi
-else
-    mkdir $2
-fi
-
-echo uniso.sh will export iso file to $WORKDIR, the dir tree like this:
-echo +mkiso_out
-echo \|---mymint---------------  The files contained in iso.
-echo \|---initrd_lz------------  The files contained in iso/casper/initrd_lz
-echo \\---squashfs-root--------  The files contained in iso/casper/filesystem.squashfs
-
-if [ ! -d $WORKDIR/mymint ] ; then
-    mkdir $WORKDIR/mymint
-
-    if [ ! -e mintiso ] ; then
-        echo mount iso to $WORKDIR/mintiso
-        mkdir $WORKDIR/mintiso
-        mount -o loop $ORIGINISO $WORKDIR/mintiso
+    set +e
+    umount /mnt
+    set -e
+    mount ${BASEDIR}/distro/${distro}.iso /mnt
+    notice "Rsync from /mnt to ${BASEDIR}/dcustom/${distro}/myiso"
+    rsync -av --delete --delete-after --progress --exclude=casper/filesystem.squashfs /mnt/ myiso/
+    if [ $? -eq 0 ]; then
+        notice "Rsync success."
     else
-        echo warning:mintiso has exist, it is expected iso has been mounted normally.
+        error "Error during Rsync from /mnt"
     fi
-
-    echo copy iso/* to mymint, just wait for some minutes.
-    cp -r $WORKDIR/mintiso/. $WORKDIR/mymint
-    umount $WORKDIR/mintiso
-    rmdir $WORKDIR/mintiso
-else
-    echo warning:mymint has exist, it is expected iso/* has been copied to mymint dir.
+    umount /mnt
 fi
-
-cd ${WORKDIR}
-
-if [ ! -e initrd_lz ] ; then
-    echo gunzip initrd.lz
-    mkdir initrd_lz
-    cp mymint/casper/initrd.lz initrd.lz
-    echo warning: now, it is supported the format of initrd.lz is gzip, not lzma. If it is lzma, you should change it.
-    mv initrd.lz initrd.gz
-    gunzip initrd.gz
-    cd initrd_lz
-    cpio -id<../initrd
-    rm ../initrd
-    cd ..
+notice "Rsync from ${BASEDIR}/distro/filesystem.squashfs/${distro}/ to ${BASEDIR}/dcustom/${distro}/squashfs-root"
+cd ${BASEDIR}
+rsync -av --delete --delete-after --progress distro/filesystem.squashfs/${distro}/ dcustom/${distro}/squashfs-root/
+if [ $? -eq 0 ]; then
+    notice "Rsync success."
 else
-    echo warning: initrd_lz has exist, it is expected initrd.lz has been decompressed normally.
+    error "Error during Rsync from ${BASEDIR}/distro/filesystem.squashfs/${distro}/"
 fi
+notice "Uniso has finished."
 
-if [ ! -e squashfs-root ] ; then
-    echo unsquashfs mymint/casper/filesystem.squashfs
-    echo just wait for some minutes.
-    unsquashfs mymint/casper/filesystem.squashfs
-else
-    echo warning:squashfs-root has exist, it is expected filesystem.squashfs has been executed unsquashfs normally.    
-fi
-
-echo uniso has finished.
