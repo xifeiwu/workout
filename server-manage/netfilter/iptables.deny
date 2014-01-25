@@ -1,3 +1,6 @@
 #!/bin/bash
 # 底下填寫的是『你要抵擋的那個咚咚！』
-iptables -A INPUT -i $EXTIF -s 222.186.62.66 -j DROP
+#DENYIP=(`cat /var/log/secure*| grep "Failed password for invalid user root from"| awk '{print $13}' | sort | uniq -c | awk '{if($1 > 30) print $2}'`)
+#for ip in ${DENYIP[@]}; do
+#    iptables -A INPUT -i $EXTIF -s ${ip} -j DROP
+#done
