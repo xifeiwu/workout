@@ -2,6 +2,7 @@
 SERVICES2CLOSE=(cups vncserver rpcbind)
 SERVICES2OPEN=(httpd vsftpd auditd)
 for service in ${SERVICES2CLOSE[@]}; do
+    service cupsd stop
     chkconfig ${service} off
     if [ $? -eq 0]; then
         echo "service ${service} off"

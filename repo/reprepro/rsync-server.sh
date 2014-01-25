@@ -97,7 +97,7 @@ LOCAL=
 SERVER=
 for dir in ${SELECTEDDIR[@]}; do
     LOCAL="${BASEDIR}/${dir}/"
-    SERVER="cos@192.168.160.10:/home/cos/website/cos/${dir}/"
+    SERVER="cos@192.168.160.16:/home/cos/website/cos/${dir}/"
     if ${TOSERVER} ; then
         if [ ! -d ${LOCAL} ]; then
             error "${LOCAL} is not found."
