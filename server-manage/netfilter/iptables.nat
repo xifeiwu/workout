@@ -21,7 +21,7 @@ iptables -t nat -P OUTPUT      ACCEPT
 
 # 3. 若有內部介面的存在 (雙網卡) 開放成為路由器，且為 IP 分享器！
 if [ "$INIF" != "" ]; then
-    iptables -A INPUT -i $INIF -j ACCEPT
+#    iptables -A INPUT -i $INIF -j ACCEPT
     echo "1" > /proc/sys/net/ipv4/ip_forward
     if [ "$INNET" != "" ]; then
         for innet in $INNET

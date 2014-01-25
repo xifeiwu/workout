@@ -32,7 +32,9 @@ iptables -t mangle -Z
 iptables -P INPUT   DROP
 iptables -P OUTPUT  ACCEPT
 iptables -P FORWARD ACCEPT   #如不需NAT，写成DROP
-iptables -A INPUT -i lo -j ACCEPT
+
+iptables -A INPUT -i lo -p all -j ACCEPT
+iptables -A OUTPUT -o lo -p all -j ACCEPT
 iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 
 # 3. 啟動額外的防火牆 script 模組
@@ -66,7 +68,7 @@ read -p "Go on for nat setting[Y/n]?  " yn
 if [ ${yn} == "y" -a -f ./iptables.nat ]; then
     sh ./iptables.nat
 else
-    echo "1" > /proc/sys/net/ipv4/ip_forward
+    echo "0" > /proc/sys/net/ipv4/ip_forward
 fi
 
 # 6. 最終將這些功能儲存下來吧！
