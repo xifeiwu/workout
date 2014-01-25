@@ -66,6 +66,9 @@ sed -i '/libdebian-installer/d' myiso/casper/filesystem.manifest-desktop
 sed -i '/user-setup/d' myiso/casper/filesystem.manifest-desktop
 
 notice "make squashfs for directory ${BASEDIR}/dcustom/${distro}/squashfs-root"
+if [ -f myiso/casper/filesystem.squashfs ]; then
+    rm myiso/casper/filesystem.squashfs
+fi
 mksquashfs squashfs-root myiso/casper/filesystem.squashfs
 
 notice "Generate ${BASEDIR}/dcustom/${distro}/myiso/md5sum.txt"
