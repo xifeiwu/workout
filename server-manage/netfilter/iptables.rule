@@ -63,7 +63,7 @@ iptables -A INPUT -p tcp -i ${INIF} --dport 21 --sport 1024:65534 -j ACCEPT
 iptables -A INPUT -p tcp -i ${INIF} --dport 22 --sport 1024:65534 -j ACCEPT
 iptables -A INPUT -p tcp -i ${INIF} --dport 80 --sport 1024:65534 -j ACCEPT
 iptables -A INPUT -p icmp -i ${INIF} -j ACCEPT
-#iptables -A OUTPUT -p TCP -o ${EXTIF} --sport 1024:65534 -j LOG
+iptables -A OUTPUT -o ${EXTIF} -j LOG
 
 read -p "Go on for nat setting[Y/n]?  " yn
 if [ ${yn} == "y" -a -f ./iptables.nat ]; then
