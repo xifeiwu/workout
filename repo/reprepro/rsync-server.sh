@@ -55,7 +55,7 @@ while [ "$#" -gt "0" ]; do
 done
 
 if [ -z ${TOSERVER} ]; then
-    error "--to(-t) or --from(-f) parameter must be specified"
+    error "--to(-t) or --from(-f) server must be specified"
 fi
 
 #select directory want to sync
