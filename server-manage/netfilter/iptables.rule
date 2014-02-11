@@ -49,23 +49,25 @@ if [ -f ./iptables.http ]; then
 fi
 
 # 4. 允許某些類型的 ICMP 封包進入
-#AICMP="0 3 3/4 4 11 12 14 16 18"
-#for tyicmp in $AICMP
-#do
-#  iptables -A INPUT -i $EXTIF -p icmp --icmp-type $tyicmp -j ACCEPT
-#done
+AICMP="0 3 3/4 4 11 12 14 16 18"
+for tyicmp in $AICMP
+do
+  iptables -A INPUT -i $EXTIF -p icmp --icmp-type $tyicmp -j ACCEPT
+done
 
 # 5. 允許某些服務的進入，請依照你自己的環境開啟
 #iptables -A INPUT -p TCP -i ${EXTIF} --dport 21 --sport 1024:65534 -j ACCEPT # FTP
 #iptables -A INPUT -p TCP -i ${EXTIF} --dport 22 --sport 1024:65534 -j ACCEPT #SSH
 iptables -A INPUT -p TCP -i ${EXTIF} --dport 80 --sport 1024:65534 -j ACCEPT #WWW
+#iptables -A INPUT -i ${EXTIF} -j LOG
+#iptables -A OUTPUT -o ${EXTIF} -j LOG
+#iptables -A OUTPUT -o ${EXTIF}i -p tcp --sport 1024:65534 -j DROP
+#iptables -A OUTPUT -o ${EXTIF}i -p udp --sport 1024:65534 -j DROP
+
 iptables -A INPUT -p tcp -i ${INIF} --dport 21 --sport 1024:65534 -j ACCEPT
 iptables -A INPUT -p tcp -i ${INIF} --dport 22 --sport 1024:65534 -j ACCEPT
 iptables -A INPUT -p tcp -i ${INIF} --dport 80 --sport 1024:65534 -j ACCEPT
 iptables -A INPUT -p icmp -i ${INIF} -j ACCEPT
-#iptables -A OUTPUT -o ${EXTIF}i -p tcp --sport 1024:65534 -j DROP
-#iptables -A OUTPUT -o ${EXTIF}i -p udp --sport 1024:65534 -j DROP
-#iptables -A OUTPUT -o ${EXTIF} -j LOG
 
 read -p "Go on for nat setting[Y/n]?  " yn
 if [ ${yn} == "y" -a -f ./iptables.nat ]; then
