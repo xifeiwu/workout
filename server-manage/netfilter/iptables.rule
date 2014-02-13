@@ -69,6 +69,8 @@ iptables -A INPUT -p tcp -i ${INIF} --dport 22 --sport 1024:65534 -j ACCEPT
 iptables -A INPUT -p tcp -i ${INIF} --dport 80 --sport 1024:65534 -j ACCEPT
 iptables -A INPUT -p icmp -i ${INIF} -j ACCEPT
 
+#iptables -t nat -A POSTROUTING -s 124.16.141.173 --to-destination 124.16.141.172:80 -j MASQUERADE
+
 read -p "Go on for nat setting[Y/n]?  " yn
 if [ ${yn} == "y" -a -f ./iptables.nat ]; then
     sh ./iptables.nat
