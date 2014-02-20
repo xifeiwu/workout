@@ -34,7 +34,9 @@ case ${1} in
 ;;
 "dnat")
     # 4. NAT 伺服器後端的 LAN 內對外之伺服器設定
-    iptables -t nat -A PREROUTING -p tcp -i $EXTIF --dport 8080 -j DNAT --to-destination 192.168.160.176:80 # WWW
+    serverip="192.168.160.176"
+    iptables -t nat -A PREROUTING -p tcp -i $EXTIF -d 124.16.141.172 --dport 8080 -j DNAT --to-destination ${serverip}:80 # WWW
+    iptables -t nat -A POSTROUTING -d ${serverip} -p tcp --dport 80 -j SNAT --to 192.168.160.16
 ;;
 esac
 

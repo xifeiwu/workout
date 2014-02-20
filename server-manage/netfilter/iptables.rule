@@ -10,6 +10,7 @@ export EXTIF INIF INNET
 # 1. 先設定好核心的網路功能：
 echo "1" > /proc/sys/net/ipv4/tcp_syncookies
 echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
+echo "1" > /proc/sys/net/ipv4/ip_forward
 for i in /proc/sys/net/ipv4/conf/*/{rp_filter,log_martians}; do
       echo "1" > $i
 done
@@ -56,14 +57,17 @@ fi
 #done
 
 # 5. 允許某些服務的進入，請依照你自己的環境開啟
+iptables -A INPUT -i ${EXTIF} -j LOG
+iptables -A OUTPUT -o ${EXTIF} -j LOG
 #iptables -A INPUT -p TCP -i ${EXTIF} --dport 21 --sport 1024:65534 -j ACCEPT # FTP
 #iptables -A INPUT -p TCP -i ${EXTIF} --dport 22 --sport 1024:65534 -j ACCEPT #SSH
 iptables -A INPUT -p TCP -i ${EXTIF} --dport 80 --sport 1024:65534 -j ACCEPT #WWW
-#iptables -A INPUT -i ${EXTIF} -j LOG
-#iptables -A OUTPUT -o ${EXTIF} -j LOG
+iptables -A INPUT -p TCP -i ${EXTIF} --dport 8080 --sport 1024:65534 -j ACCEPT #WWW
 #iptables -A OUTPUT -o ${EXTIF}i -p tcp --sport 1024:65534 -j DROP
 #iptables -A OUTPUT -o ${EXTIF}i -p udp --sport 1024:65534 -j DROP
 
+iptables -A INPUT -i ${INIF} -j LOG
+iptables -A OUTPUT -o ${INIF} -j LOG
 iptables -A INPUT -p tcp -i ${INIF} --dport 21 --sport 1024:65534 -j ACCEPT
 iptables -A INPUT -p tcp -i ${INIF} --dport 22 --sport 1024:65534 -j ACCEPT
 iptables -A INPUT -p tcp -i ${INIF} --dport 80 --sport 1024:65534 -j ACCEPT
@@ -79,6 +83,7 @@ case ${choose} in
         echo "${choose} setting success..."
     else        
         echo "${choose} setting fail..."
+    fi
     ;;
 *)
     echo "0" > /proc/sys/net/ipv4/ip_forward
