@@ -49,11 +49,11 @@ if [ -f ./iptables.http ]; then
 fi
 
 # 4. 允許某些類型的 ICMP 封包進入
-AICMP="0 3 3/4 4 11 12 14 16 18"
-for tyicmp in $AICMP
-do
-  iptables -A INPUT -i $EXTIF -p icmp --icmp-type $tyicmp -j ACCEPT
-done
+#AICMP="0 3 3/4 4 11 12 14 16 18"
+#for tyicmp in $AICMP
+#do
+#  iptables -A INPUT -i $EXTIF -p icmp --icmp-type $tyicmp -j ACCEPT
+#done
 
 # 5. 允許某些服務的進入，請依照你自己的環境開啟
 #iptables -A INPUT -p TCP -i ${EXTIF} --dport 21 --sport 1024:65534 -j ACCEPT # FTP
@@ -71,12 +71,20 @@ iptables -A INPUT -p icmp -i ${INIF} -j ACCEPT
 
 #iptables -t nat -A POSTROUTING -s 124.16.141.173 --to-destination 124.16.141.172:80 -j MASQUERADE
 
-read -p "Go on for nat setting[Y/n]?  " yn
-if [ ${yn} == "y" -a -f ./iptables.nat ]; then
-    sh ./iptables.nat
-else
+read -p "Go on for nat setting[dnat(prerouting)/snat(postrouting)]?  " choose
+case ${choose} in
+"dnat" | "snat")
+    sh ./iptables.nat ${choose}
+    if [ $? -eq 0 ]; then
+        echo "${choose} setting success..."
+    else        
+        echo "${choose} setting fail..."
+    ;;
+*)
     echo "0" > /proc/sys/net/ipv4/ip_forward
-fi
+    echo "nat setting ignore..."
+    ;;
+esac
 
 # 6. 最終將這些功能儲存下來吧！
 /etc/init.d/iptables save

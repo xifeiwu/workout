@@ -18,26 +18,30 @@ iptables -Z -t nat
 iptables -t nat -P PREROUTING  ACCEPT
 iptables -t nat -P POSTROUTING ACCEPT
 iptables -t nat -P OUTPUT      ACCEPT
-
-# 3. 若有內部介面的存在 (雙網卡) 開放成為路由器，且為 IP 分享器！
-if [ "$INIF" != "" ]; then
-#    iptables -A INPUT -i $INIF -j ACCEPT
-    echo "1" > /proc/sys/net/ipv4/ip_forward
-    if [ "$INNET" != "" ]; then
-        for innet in $INNET
-        do
-            iptables -t nat -A POSTROUTING -s $innet -o $EXTIF -j MASQUERADE
-        done
+case ${1} in
+"snat")
+    # 3. 若有內部介面的存在 (雙網卡) 開放成為路由器，且為 IP 分享器！
+    if [ "$INIF" != "" ]; then
+    #    iptables -A INPUT -i $INIF -j ACCEPT
+        echo "1" > /proc/sys/net/ipv4/ip_forward
+        if [ "$INNET" != "" ]; then
+            for innet in $INNET
+            do
+                iptables -t nat -A POSTROUTING -s $innet -o $EXTIF -j MASQUERADE
+            done
+        fi
     fi
-fi
+;;
+"dnat")
+    # 4. NAT 伺服器後端的 LAN 內對外之伺服器設定
+    iptables -t nat -A PREROUTING -p tcp -i $EXTIF --dport 8080 -j DNAT --to-destination 192.168.160.176:80 # WWW
+;;
+esac
+
 # 如果你的 MSN 一直無法連線，或者是某些網站 OK 某些網站不 OK，
 # 可能是 MTU 的問題，那你可以將底下這一行給他取消註解來啟動 MTU 限制範圍
 # iptables -A FORWARD -p tcp -m tcp --tcp-flags SYN,RST SYN -m tcpmss \
 #          --mss 1400:1536 -j TCPMSS --clamp-mss-to-pmtu
-
-# 4. NAT 伺服器後端的 LAN 內對外之伺服器設定
-# iptables -t nat -A PREROUTING -p tcp -i $EXTIF --dport 80 \
-#          -j DNAT --to-destination 192.168.1.210:80 # WWW
 
 # 5. 特殊的功能，包括 Windows 遠端桌面所產生的規則，假設桌面主機為 1.2.3.4
 # iptables -t nat -A PREROUTING -p tcp -s 1.2.3.4  --dport 6000 \
