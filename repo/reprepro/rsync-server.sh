@@ -1,32 +1,9 @@
 #!/bin/sh
-function notice()
-{
-    echo -e "\033[2;32m-$@\033[0m"
-}
-function warning()
-{
-    echo -e "\033[2;33m-$@\033[0m"
-}
-function error()
-{
-    echo -e "\033[2;31m-$@\033[0m"
-    exit 1
-}
-function warning_read()
-{
-    echo -ne "\033[2;33m-$@\033[0m"
-}
-
-#looking for base dir.
-BASEDIR=
-tmp=`cat ./conf/options | sed -n 3p | awk '{print $1}'`
-if [ ${tmp} == "basedir" ] ; then
-    BASEDIR=`cat ./conf/options | sed -n 3p | awk '{print $2}'`
+if [ -f ./get_parameters.sh ]; then
+    source ./get_parameters.sh
 else
-    error "properity basedir not find in ./conf/options"
-fi
-if [ ! -d ${BASEDIR} ] ; then
-    error "${BASEDIR} is not a directory"
+    echo -e "\033[2;31m-./get_parameters.sh not found.\033[0m"
+    exit 1
 fi
 
 #parse parameter
@@ -65,7 +42,7 @@ notice "All directories are listed below:"
 for ((i=0; i<$size; i++)); do
     echo "$((i+1)). ${ALLDIRS[$i]}"
 done
-warning_read "Select directory you want to sync[a|1|2|...]:"
+warning_read "Select directory you want to sync[a|1|2|...]: "
 read sel
 declare -a SELECTEDDIR
 case $sel in
@@ -83,10 +60,10 @@ case $sel in
 esac
 warning "Selected directories: ${SELECTEDDIR[@]}"
 if ${TOSERVER} ; then
-    warning_read "sync from localhost to server(172)[Y/n]?"
+    warning_read "sync from localhost to server(172)[Y/n]? "
     read yn
 else
-    warning_read "sync from server(172) to localhost[Y/n]?"
+    warning_read "sync from server(172) to localhost[Y/n]? "
     read yn
 fi
 if [ "${yn}" != "y" -a "${yn}" != "Y" ]; then

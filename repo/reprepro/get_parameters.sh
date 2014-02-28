@@ -16,6 +16,11 @@ function error()
     echo -e "\033[2;31m-$@\033[0m"
     exit 1
 }
+function warning_read()
+{
+    echo -ne "\033[2;33m-$@\033[0m"
+}
+
 CODENAME=
 KEYRING=
 BASEDIR=
@@ -24,20 +29,20 @@ tmp=`cat ./conf/distributions | sed -n 3p | awk '{print $1}'`
 if [ ${tmp} == "Codename:" ] ; then
     CODENAME=`cat ./conf/distributions | sed -n 3p | awk '{print $2}'`
 else
-    error "properity codename not find in ./conf/distributions"
+    error "Codename was not find in ./conf/distributions"
 fi
 tmp=`cat ./conf/distributions | sed -n 7p | awk '{print $1}'`
 if [ ${tmp} == "SignWith:" ] ; then
     KEYRING=`cat ./conf/distributions | sed -n 7p | awk '{print $2}'`
 else
-    error "properity SignWith not find in ./conf/distributions"
+    error "SignWith was not find in ./conf/distributions"
 fi
 
 tmp=`cat ./conf/options | sed -n 3p | awk '{print $1}'`
 if [ ${tmp} == "basedir" ] ; then
     BASEDIR=`cat ./conf/options | sed -n 3p | awk '{print $2}'`
 else
-    error "properity basedir not find in ./conf/options"
+    error "basedir was not find in ./conf/options"
 fi
 if [ ! -d ${BASEDIR} ] ; then
     mkdir -p ${BASEDIR}
