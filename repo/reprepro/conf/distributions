@@ -1,10 +1,10 @@
-Origin: COS Desktop
-Label: COS Desktop
+Origin: cosdekstop
+Label: cosdesktop
 Codename: iceblue
 Architectures: i386 source
-Components: main universe
+Components: main universe partner
 Description: APT Repository for COS Desktop
-SignWith: 72368F36
+SignWith: 06E71613
 DebOverride: override.iceblue
 DscOverride: override.iceblue
 

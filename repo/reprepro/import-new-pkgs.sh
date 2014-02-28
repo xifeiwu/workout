@@ -21,7 +21,7 @@ do
     "-C"|"--component")
         ((argp++))
         COMPONENTS=${argv[${argp}]}
-        echo ${COMPONENTS} | egrep '^main$|^multiverse$|^restricted$|^universe$' > /dev/null 2>&1
+        echo ${COMPONENTS} | egrep '^main$|^multiverse$|^restricted$|^universe$|^partner$' > /dev/null 2>&1
         if [ $? -eq 0 ] ; then
             ((argp++))
         else
