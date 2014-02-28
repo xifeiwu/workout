@@ -1,50 +1,10 @@
 #!/bin/sh
-#find keyring and basedir in configure file in conf
-COMPONENTS="main"
-ARCHITECTURE="i386|source"
-IGNORE="--ignore=surprisingarch --ignore=unusedarch --ignore=wrongdistribution"
-function notice()
-{
-    echo -e "\033[2;32m-$@\033[0m"
-}
-function warning()
-{
-    echo -e "\033[2;33m-$@\033[0m"
-}
-function error()
-{
-    echo -e "\033[2;31m-$@\033[0m"
+if [ -f ./get_parameters.sh ]; then
+    source ./get_parameters.sh
+else
+    echo -e "\033[2;31m-./get_parameters.sh not found.\033[0m"
     exit 1
-}
-CODENAME=
-KEYRING=
-BASEDIR=
-function getparameter()
-{
-    tmp=`cat ./conf/distributions | sed -n 3p | awk '{print $1}'`
-    if [ ${tmp} == "Codename:" ] ; then
-        CODENAME=`cat ./conf/distributions | sed -n 3p | awk '{print $2}'`
-    else
-        error "properity codename not find in ./conf/distributions"
-    fi
-    tmp=`cat ./conf/distributions | sed -n 7p | awk '{print $1}'`
-    if [ ${tmp} == "SignWith:" ] ; then
-        KEYRING=`cat ./conf/distributions | sed -n 7p | awk '{print $2}'`
-    else
-        error "properity SignWith not find in ./conf/distributions"
-    fi
-
-    tmp=`cat ./conf/options | sed -n 3p | awk '{print $1}'`
-    if [ ${tmp} == "basedir" ] ; then
-        BASEDIR=`cat ./conf/options | sed -n 3p | awk '{print $2}'`
-    else
-        error "properity basedir not find in ./conf/options"
-    fi
-    if [ ! -d ${BASEDIR} ] ; then
-        mkdir -p ${BASEDIR}
-    fi
-}
-getparameter
+fi
 
 INCOMING=
 declare -a DEBFILES
@@ -104,7 +64,7 @@ do
     "-c"|"--changes")
         ((argp++))
         arg=${argv[$argp]}
-echo "in changes: argp: ${argp} arg : ${arg} args: ${args}"
+        #echo "in changes: argp: ${argp} arg : ${arg} args: ${args}"
         if [ ! -z ${arg} ] && [ ${arg} == "." ]; then
             if [ -d ${INCOMING} ]; then
                 CHANGESFILES=(`find $INCOMING -name '*.changes'`) > /dev/null 2>&1
@@ -129,7 +89,8 @@ echo "in changes: argp: ${argp} arg : ${arg} args: ${args}"
     "-h"|"--help")
         echo "Usage import-new-pkgs:"
         echo "Used to refresh repository by import .changes or .deb files"
-        echo "  [-i | --incoming]   :   set incoming directory"
+        echo "  [-C | --component]  :   specify component"
+        echo "  [-I | --incoming]   :   set incoming directory"
         echo "  [-c | --changes]    :   add .changes file manually in incoming directory."
         echo "  [-d | --deb]        :   add .deb file manually in incoming directory."
         echo "More : if . is follow by parameter -c or -d the corresponding file will find automatically in incoming directory."
