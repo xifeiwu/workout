@@ -116,10 +116,10 @@ if ${TOREMOTE} ; then
     if [ "${yn}" == "Y" -o "${yn}" == "y" ] ; then
         for ((i=0;i<${dircnts};i++))
         do
-            notice "rsync -av --progress --delete ${DIRPATH}/${DIRS[$i]}/ ${REMOTE}:${DIRPATH}/${DIRS[$i]}/"
-            rsync -av --progress --delete ${DIRPATH}/${DIRS[$i]}/ ${REMOTE}:${DIRPATH}/${DIRS[$i]}/
+            notice "rsync -av --progress --delete ${DIRPATH}${DIRS[$i]}/ ${REMOTE}:${DIRPATH}${DIRS[$i]}/"
+            rsync -av --progress --delete ${DIRPATH}${DIRS[$i]}/ ${REMOTE}:${DIRPATH}${DIRS[$i]}/
             if [ $? -ne 0 ]; then
-                error "Error during: Rsync from ${DIRPATH}/${DIRS[$i]}/ to ${REMOTE}:${DIRPATH}/${DIRS[$i]}/"
+                error "Error during: Rsync from ${DIRPATH}${DIRS[$i]}/ to ${REMOTE}:${DIRPATH}${DIRS[$i]}/"
             fi
         done
     else
@@ -141,10 +141,10 @@ else
     if [ "${yn}" == "Y" -o "${yn}" == "y" ] ; then
         for ((i=0;i<${dircnts};i++))
         do
-            notice "rsync -av --progress --delete ${REMOTE}:${DIRPATH}/${DIRS[$i]}/ ${DIRPATH}/${DIRS[$i]}/"
-            rsync -av --progress --delete ${REMOTE}:${DIRPATH}/${DIRS[$i]}/ ${DIRPATH}/${DIRS[$i]}/
+            notice "rsync -av --progress --delete ${REMOTE}:${DIRPATH}${DIRS[$i]}/ ${DIRPATH}${DIRS[$i]}/"
+            rsync -av --progress --delete ${REMOTE}:${DIRPATH}${DIRS[$i]}/ ${DIRPATH}${DIRS[$i]}/
             if [ $? -ne 0 ]; then
-                error "Error during: Rsync from ${REMOTE}:${DIRPATH}/${DIRS[$i]}/ to ${DIRPATH}/${DIRS[$i]}/"
+                error "Error during: Rsync from ${REMOTE}:${DIRPATH}${DIRS[$i]}/ to ${DIRPATH}${DIRS[$i]}/"
             fi
         done
     else
