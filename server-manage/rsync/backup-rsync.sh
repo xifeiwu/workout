@@ -16,6 +16,7 @@ do
         echo ""
         echo "Arguments:"
         echo "  --remote[-R]        set remote: user@ip"
+        echo "  --path[-P]          specify the path to rsync"
         echo "  --to[-t]            rsync to remote"
         echo "  --from[-f]          rsync from remote"
         exit 0
@@ -123,7 +124,7 @@ if ${TOREMOTE} ; then
     else
         error "Exit as you expected."
     fi
-
+    notice "Rsync directories ${DIRS[@]} success."
 else
     dirs=`ssh ${REMOTE} "cd ${DIRPATH}; find . -maxdepth 1 -type d"`
     select_dir "${dirs}"
@@ -147,4 +148,5 @@ else
     else
         error "Exit as you expected."
     fi
+    notice "Rsync directories ${DIRS[@]} success."
 fi
