@@ -5,9 +5,10 @@ else
     echo "File assist.sh is not found in current directory."
 fi
 
-REMOTE=""
 TOREMOTE=""
-DIRPATH=""
+REMOTE=""
+REMOTEDIR=""
+LOCALDIR=""
 while [ $# -gt 0 ]
 do
     case $1 in
@@ -15,28 +16,34 @@ do
         echo "Usage: rsync directories from one host to another"
         echo ""
         echo "Arguments:"
-        echo "  --remote[-R]        set remote: user@ip"
-        echo "  --path[-P]          specify the path to rsync"
-        echo "  --to[-t]            rsync to remote"
-        echo "  --from[-f]          rsync from remote"
+        echo "  --from[-F|-f]           rsync from remote"
+        echo "  --to[-T|-t]             rsync to remote"
+        echo "  --remote[-R]            set remote: user@ip"
+        echo "  --remote-dir[-RD]       specify the path to rsync"
+        echo "  --local-dir[-LD]        specify the path to rsync"
         exit 0
         ;;
-    "-R"|"--remote")
-        shift
-        REMOTE="$1"
-        shift
-    ;;
-    "--to"|"-T")
-        TOREMOTE=true
-        shift
-        ;;
-    "--from"|"-F")
+    "--from"|"-F"|"-f")
         TOREMOTE=false
         shift
         ;;
-    "--path"|"-P")
+    "--to"|"-T"|"-t")
+        TOREMOTE=true
         shift
-        DIRPATH="$1"
+        ;;
+    "--remote"|"-R")
+        shift
+        REMOTE="$1"
+        shift
+        ;;
+    "--remote-dir"|"-RD")
+        shift
+        REMOTEDIR="$1"
+        shift
+        ;;
+    "--local-dir"|"-LD")
+        shift
+        LOCALDIR="$1"
         shift
         ;;
     *)
@@ -45,20 +52,21 @@ do
     esac
 done
 
-if [ -z "${REMOTE}" -o -z "${TOREMOTE}" -o -z "${DIRPATH}" ]; then
-    error "remote,[-T|-F], path must be set.\n-Use -H for more info."
+if [ -z "${TOREMOTE}" -o -z "${REMOTE}" -o -z "${REMOTEDIR}" ]; then
+    error "rsync from or to remote, remote ip and dir must be set.\n-Use -H for more info."
 fi
-if [ ! -d "${DIRPATH}" ]; then
-    error "DIRPATH: ${DIRPATH} does not exist."
+if [ ! -d "${LOCALDIR}" ]; then
+    error "LOCAL DIR: ${LOCALDIR} does not exist."
 fi
 
-warning "REMOTE\t\t:${REMOTE}"
 warning "TOREMOTE\t:${TOREMOTE}"
-warning "DIRPATH\t:${DIRPATH}"
+warning "REMOTE\t\t:${REMOTE}"
+warning "REMOTE-DIR\t:${REMOTEDIR}"
+warning "LOCAL-DIR\t:${LOCALDIR}"
 if ${TOREMOTE} ; then
-    warning "Script will rsync from ${DIRPATH} to ${REMOTE}:${DIRPATH}"
+    warning "Script will rsync from local:${LOCALDIR} to ${REMOTE}:${REMOTEDIR}"
 else
-    warning "Script will rsync from ${REMOTE}:${DIRPATH} to ${DIRPATH}"
+    warning "Script will rsync from ${REMOTE}:${REMOTEDIR} to local:${LOCALDIR}"
 fi
 
 notice_read "Are the following Parameters Correct[Y/n]? " yn
@@ -102,7 +110,7 @@ function select_dir()
 }
 
 if ${TOREMOTE} ; then
-    dirs=`cd ${DIRPATH}; find . -maxdepth 1 -type d`
+    dirs=`cd ${LOCALDIR}; find . -maxdepth 1 -type d`
     select_dir "${dirs}"
     for ((i=0;i<${dircnts};i++))
     do
@@ -116,10 +124,10 @@ if ${TOREMOTE} ; then
     if [ "${yn}" == "Y" -o "${yn}" == "y" ] ; then
         for ((i=0;i<${dircnts};i++))
         do
-            notice "rsync -av --progress --delete ${DIRPATH}${DIRS[$i]}/ ${REMOTE}:${DIRPATH}${DIRS[$i]}/"
-            rsync -av --progress --delete ${DIRPATH}${DIRS[$i]}/ ${REMOTE}:${DIRPATH}${DIRS[$i]}/
+            notice "rsync -av --progress --delete ${LOCALDIR}${DIRS[$i]}/ ${REMOTE}:${REMOTEDIR}${DIRS[$i]}/"
+            rsync -av --progress --delete ${LOCALDIR}${DIRS[$i]}/ ${REMOTE}:${REMOTEDIR}${DIRS[$i]}/
             if [ $? -ne 0 ]; then
-                error "Error during: Rsync from ${DIRPATH}${DIRS[$i]}/ to ${REMOTE}:${DIRPATH}${DIRS[$i]}/"
+                error "Error during: Rsync from ${LOCALDIR}${DIRS[$i]}/ to ${REMOTE}:${REMOTEDIR}${DIRS[$i]}/"
             fi
         done
     else
@@ -127,7 +135,7 @@ if ${TOREMOTE} ; then
     fi
     notice "Rsync directories ${DIRS[@]} success."
 else
-    dirs=`ssh ${REMOTE} "cd ${DIRPATH}; find . -maxdepth 1 -type d"`
+    dirs=`ssh ${REMOTE} "cd ${REMOTEDIR}; find . -maxdepth 1 -type d"`
     select_dir "${dirs}"
     for ((i=0;i<${dircnts};i++))
     do
@@ -141,10 +149,10 @@ else
     if [ "${yn}" == "Y" -o "${yn}" == "y" ] ; then
         for ((i=0;i<${dircnts};i++))
         do
-            notice "rsync -av --progress --delete ${REMOTE}:${DIRPATH}${DIRS[$i]}/ ${DIRPATH}${DIRS[$i]}/"
-            rsync -av --progress --delete ${REMOTE}:${DIRPATH}${DIRS[$i]}/ ${DIRPATH}${DIRS[$i]}/
+            notice "rsync -av --progress --delete ${REMOTE}:${REMOTEDIR}${DIRS[$i]}/ ${LOCALDIR}${DIRS[$i]}/"
+            rsync -av --progress --delete ${REMOTE}:${REMOTEDIR}${DIRS[$i]}/ ${LOCALDIR}${DIRS[$i]}/
             if [ $? -ne 0 ]; then
-                error "Error during: Rsync from ${REMOTE}:${DIRPATH}${DIRS[$i]}/ to ${DIRPATH}${DIRS[$i]}/"
+                error "Error during: Rsync from ${REMOTE}:${REMOTEDIR}${DIRS[$i]}/ to ${LOCALDIR}${DIRS[$i]}/"
             fi
         done
     else
