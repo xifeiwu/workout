@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)https://code.google.com/p/goagent/wiki/ConfigIntroduce -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ 
+ <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+ 
+ <meta name="ROBOTS" content="NOARCHIVE">
+ 
+ <link rel="icon" type="image/vnd.microsoft.icon" href="https://ssl.gstatic.com/codesite/ph/images/phosting.ico">
+ 
+ 
+ <link rel="canonical" href="./ConfigIntroduce - goagent - 配置介绍 - https   github.com goagent goagent - Google Project Hosting_files/ConfigIntroduce - goagent - 配置介绍 - https   github.com goagent goagent - Google Project Hosting.html">
+ 
+ <script src="./ConfigIntroduce - goagent - 配置介绍 - https   github.com goagent goagent - Google Project Hosting_files/cb=gapi.loaded_0" async=""></script><script type="text/javascript" async="" src="./ConfigIntroduce - goagent - 配置介绍 - https   github.com goagent goagent - Google Project Hosting_files/plusone.js" gapi_processed="true"></script><script type="text/javascript">
+ 
+ 
+ 
+ 
+ var codesite_token = "ABZ6GAcdpop7DcdRKZgA7T2C8O9FKiRwrA:1411361540262";
+ 
+ 
+ var CS_env = {"projectName": "goagent", "loggedInUserEmail": "iscas2012@gmail.com", "token": "ABZ6GAcdpop7DcdRKZgA7T2C8O9FKiRwrA:1411361540262", "profileUrl": "/u/110450402036711882368/", "relativeBaseUrl": "", "assetVersionPath": "https://ssl.gstatic.com/codesite/ph/16315335801608708296", "domainName": null, "assetHostPath": "https://ssl.gstatic.com/codesite/ph", "projectHomeUrl": "/p/goagent"};
+ var _gaq = _gaq || [];
+ _gaq.push(
+ ['siteTracker._setAccount', 'UA-18071-1'],
+ ['siteTracker._trackPageview']);
+ 
+ (function() {
+ var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+ (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+ 
+ </script><script type="text/javascript" async="" src="./ConfigIntroduce - goagent - 配置介绍 - https   github.com goagent goagent - Google Project Hosting_files/ga.js"></script>
+ 
+ 
+ <title>ConfigIntroduce - 
+ goagent -
+ 
+ 配置介绍 - 
+ https://github.com/goagent/goagent - Google Project Hosting
+ </title>
+ <link type="text/css" rel="stylesheet" href="https://ssl.gstatic.com/codesite/ph/16315335801608708296/css/core.css">
+ 
+ <link type="text/css" rel="stylesheet" href="https://ssl.gstatic.com/codesite/ph/16315335801608708296/css/ph_detail.css">
+ 
+ 
+ 
+ <link type="application/atom+xml" rel="alternate" href="https://code.google.com/feeds/p/goagent/gitchanges/basic?path=/ConfigIntroduce.wiki&repo=wiki">
+ 
+ 
+<!--[if IE]>
+ <link type="text/css" rel="stylesheet" href="https://ssl.gstatic.com/codesite/ph/16315335801608708296/css/d_ie.css" >
+<![endif]-->
+ <style type="text/css">
+ .menuIcon.off { background: no-repeat url(https://ssl.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 -42px }
+ .menuIcon.on { background: no-repeat url(https://ssl.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 -28px }
+ .menuIcon.down { background: no-repeat url(https://ssl.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 0; }
+ 
+ 
+ #maincol {
+ padding-top: 0;
+ padding-bottom: 0;
+ }
+
+ 
+ </style>
+</head>
+<body class="t6">
+<script type="text/javascript">
+ window.___gcfg = {lang: 'en'};
+ (function() 
+ {var po = document.createElement("script");
+ po.type = "text/javascript"; po.async = true;po.src = "https://apis.google.com/js/plusone.js";
+ var s = document.getElementsByTagName("script")[0];
+ s.parentNode.insertBefore(po, s);
+ })();
+</script>
+<div class="headbg">
+
+ <div id="gaia">
+ 
+
+ <span>
+ 
+ 
+ 
+ <a href="https://code.google.com/p/goagent/wiki/ConfigIntroduce#" id="multilogin-dropdown" onclick="return false;"><u><b>iscas2012@gmail.com</b></u> <small>▼</small></a>
+ 
+ 
+ | <a href="https://code.google.com/u/110450402036711882368/" id="projects-dropdown" onclick="return false;"><u>My favorites</u> <small>▼</small></a>
+ | <a href="https://code.google.com/u/110450402036711882368/" onclick="_CS_click(&#39;/gb/ph/profile&#39;);" title="Profile, Updates, and Settings"><u>Profile</u></a>
+ | <a href="https://www.google.com/accounts/Logout?continue=https%3A%2F%2Fcode.google.com%2Fp%2Fgoagent%2Fwiki%2FConfigIntroduce" onclick="_CS_click(&#39;/gb/ph/signout&#39;);"><u>Sign out</u></a>
+ 
+ </span>
+
+ </div>
+
+ <div class="gbh" style="left: 0pt;"></div>
+ <div class="gbh" style="right: 0pt;"></div>
+ 
+ 
+ <div style="height: 1px"></div>
+<!--[if lte IE 7]>
+<div style="text-align:center;">
+Your version of Internet Explorer is not supported. Try a browser that
+contributes to open source, such as <a href="http://www.firefox.com">Firefox</a>,
+<a href="http://www.google.com/chrome">Google Chrome</a>, or
+<a href="http://code.google.com/chrome/chromeframe/">Google Chrome Frame</a>.
+</div>
+<![endif]-->
+
+
+
+ <table style="padding:0px; margin: 0px 0px 10px 0px; width:100%" cellpadding="0" cellspacing="0" itemscope="" itemtype="http://schema.org/CreativeWork">
+ <tbody><tr style="height: 58px;">
+ 
+ 
+ 
+ <td id="plogo">
+ <link itemprop="url" href="https://code.google.com/p/goagent">
+ <a href="https://code.google.com/p/goagent/">
+ 
+ 
+ <img src="./ConfigIntroduce - goagent - 配置介绍 - https   github.com goagent goagent - Google Project Hosting_files/logo" alt="Logo" itemprop="image">
+ 
+ </a>
+ </td>
+ 
+ <td style="padding-left: 0.5em">
+ 
+ <div id="pname">
+ <a href="https://code.google.com/p/goagent/"><span itemprop="name">goagent</span></a>
+ </div>
+ 
+ <div id="psum">
+ <a id="project_summary_link" href="https://code.google.com/p/goagent/"><span itemprop="description">https://github.com/goagent/goagent</span></a>
+ 
+ </div>
+ 
+ 
+ </td>
+ <td style="white-space:nowrap;text-align:right; vertical-align:bottom;">
+ 
+ <form action="https://code.google.com/hosting/search">
+ <input size="30" name="q" value="" type="text">
+ 
+ <input type="submit" name="projectsearch" value="Search projects">
+ </form>
+ 
+ </td></tr>
+ </tbody></table>
+
+</div>
+
+ 
+<div id="mt" class="gtb"> 
+ <a href="https://code.google.com/p/goagent/" class="tab ">Project&nbsp;Home</a>
+ 
+ 
+ 
+ 
+ 
+ 
+ <a href="https://code.google.com/p/goagent/w/list" class="tab active">Wiki</a>
+ 
+ 
+ 
+ 
+ 
+ <a href="https://code.google.com/p/goagent/issues/list" class="tab ">Issues</a>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <div class="gtbc"></div>
+</div>
+<table cellspacing="0" cellpadding="0" width="100%" align="center" border="0" class="st">
+ <tbody><tr>
+ 
+ 
+ 
+ <td class="subt">
+ <div class="issueDetail">
+<div class="isf">
+ 
+ <span class="inIssueList"> 
+ <span>Search</span>
+ <form action="https://code.google.com/p/goagent/w/list" method="GET" style="display:inline">
+ <select id="can" name="can">
+ <option disabled="disabled">Search within:</option>
+ 
+ <option value="1">&nbsp;All wiki pages</option>
+ <option value="3">&nbsp;Featured pages</option>
+ <option value="2" selected="selected">&nbsp;Current pages</option>
+ 
+ 
+ <option value="5">&nbsp;My starred pages</option>
+ 
+ <option value="4">&nbsp;Deprecated pages</option>
+ 
+ </select>
+ <span>for</span>
+ <span id="qq"><input type="text" size="38" id="searchq" name="q" value="" autocomplete="off"></span>
+ 
+ 
+ 
+ <input type="submit" value="Search">
+ </form>
+ </span>
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+</div>
+</div>
+
+ </td>
+ 
+ 
+ 
+ 
+ 
+ 
+ <td align="right" valign="top" class="bevel-right"></td>
+ </tr>
+</tbody></table>
+
+
+<script type="text/javascript">
+ var cancelBubble = false;
+ function _go(url) { document.location = url; }
+</script>
+<div id="maincol">
+
+ 
+
+
+
+
+
+
+
+ <style type="text/css">
+ .delcom { background: #e8e8e8 }
+ .commentcontent {
+ margin: 2em;
+ padding: 0px 10px;
+ width: 66em;
+ }
+ .artifactcomment {
+ border-top: 3px solid #c3d9ff;
+ }
+ #commentform {
+ border-top: 3px solid #c3d9ff;
+ }
+ </style>
+
+<div id="wikipage">
+<table>
+ <tbody><tr>
+ 
+ 
+ <td style="vertical-align:top; padding-left:5px">
+ 
+ <div id="wikiheader">
+ 
+ <img width="15" height="15" id="star_img" src="https://ssl.gstatic.com/codesite/ph/images/star_off.gif" style="cursor:pointer" onclick="_CS_toggleStar(this,
+ {&#39;scope&#39;: &#39;wiki&#39;,
+ &#39;user&#39;: &#39;_CURRENT_USER&#39;,
+ &#39;item&#39;: &#39;goagent:ConfigIntroduce&#39;
+ });">
+ 
+ <span style="font-size:120%;font-weight:bold">ConfigIntroduce</span>
+ &nbsp;
+ <div> 
+ 
+ <i>配置介绍</i>
+ 
+ 
+ 
+ <div id="wikiauthor" style="float:right">
+ Updated <span title="Fri Sep 12 21:31:03 2014">
+ Sep 12, 2014</span>
+ 
+ by 
+
+ <a class="userlink" href="https://code.google.com/u/phus.lu/">phus.lu</a>
+ 
+ </div>
+ </div>
+ </div>
+ 
+ <div id="wikicontent">
+ <div class="vt" id="wikimaincol">
+ <h2><a name="3.x_系列版本"></a>3.x 系列版本<a href="https://code.google.com/p/goagent/wiki/ConfigIntroduce#3.x_系列版本" class="section_anchor"></a></h2><pre class="prettyprint">[listen]
+#监听ip，如果需要允许局域网/公网使用，设为0.0.0.0即可
+ip = 127.0.0.1
+#使用GAE服务端的默认8087端口，如有需要你可以修改成其他的
+port = 8087
+#8087端口验证的用户名和密码，设置后可以防止局域网内其他人使用你的GoAgent
+username =
+password =
+#启动后goagent窗口是否可见，0为不可见（最小化至托盘），1为不最小化
+visible = 1
+#是否显示详细debug信息
+debuginfo = 0
+
+#GAE服务端的配置
+[gae]
+#你的Google app engine AppID,也就是服务器部署的APPID，配置多ID用|隔开
+appid = goagent
+#密码,默认为空,你可以在server目录的wsgi.py设定,如果设定了,此处需要与wsgi,py保持一致
+password = 123456
+#服务端路径,一般不用修改,如果不懂也不要修改.
+path = /2
+#使用http还是https(SSL加密传输)连接至GAE
+mode = https
+#填ipv6则使用[profile/ipv6]，默认ipv4使用[profile/ipv4]设置
+#此项设置意义与之前版本不同。非IPv6环境无需考虑，请勿随意修改
+profile = ipv4
+#ip评优算法每次选出的ip数量
+window = 7
+#是否缓存ip评优算法生成的临时连接
+cachesock = 1
+#是否使用http/1.1的keepalive功能
+keepalive = 0
+#是否开启流量混淆
+obfuscate = 0
+#是否通过pagespeed服务中转访问GAE
+pagespeed = 0
+#是否对服务器证书进行验证
+validate = 0
+#是否打开透明代理功能（和iptables配合使用）
+transport = 0
+# 如果设置为 rc4 则开启rc4加密，需在password设置密码，否则不开启，一般mode为https时无需开启
+options =
+#根据IP所在地区设置是否直连，比如regions = cn|jp可以让国内和日本的网站走直连。更多国家请见http://dev.maxmind.com/geoip/legacy/codes/iso3166/
+regions =
+#每次urlfetch最大返回的文件大小
+maxsize = 2097152
+
+# 用于连接GAE的IP列表
+[iplist]
+google_cn = www.g.cn|www.google.cn
+google_hk = www.google.com|mail.google.com|www.google.com.hk|www.google.com.tw|www.l.google.com|mail.l.google.com
+google_talk = talk.google.com|talk.l.google.com|talkx.l.google.com
+google_ipv6 = ipv6.google.com
+
+# 匹配的会使用crlf并且直连，=后留空则使用远程DNS解析，也可以手动指定IP防止因解析失败而无法使用，将IP写等号后面。
+# google_hk则表示使用[iplist]中的google_hk下的IP，google_cn则表示使用[iplist]中的google_cn下的IP
+[profile/ipv4]
+play.google.com = withgae
+wenda.google.com.hk = withgae
+clients.google.com = withgae
+scholar.google.com = nocrlf,noforcehttps,nofakehttps
+scholar.google.com.hk = nocrlf,noforcehttps,nofakehttps
+scholar.google.com.cn = nocrlf,noforcehttps,nofakehttps
+books.google.com.hk = nocrlf,noforcehttps,nofakehttps
+webcache.googleusercontent.com = crlf,noforcehttps,nofakehttps
+mtalk.google.com = direct
+talk.google.com = google_talk
+talk.l.google.com = google_talk
+talkx.l.google.com = google_talk
+1-ps.googleusercontent.com = google_cn
+2-ps.googleusercontent.com = google_cn
+3-ps.googleusercontent.com = google_cn
+4-ps.googleusercontent.com = google_cn
+.google.cn = google_cn
+.appspot.com = google_hk,crlf
+.google.com = google_hk,forcehttps,fakehttps
+.google.com.hk = google_hk,forcehttps,fakehttps
+.googleapis.com = google_hk,forcehttps,fakehttps
+.googleusercontent.com = google_hk,forcehttps,fakehttps
+.googletagservices.com = google_hk,forcehttps,fakehttps
+.googletagmanager.com = google_hk,forcehttps,fakehttps
+.google-analytics.com = google_cn,forcehttps,fakehttps
+.gstatic.com = google_hk,fakehttps
+.ggpht.com = google_hk,fakehttps
+.googlegroups.com = google_hk,forcehttps,fakehttps
+.googlecode.com = google_hk,forcehttps,fakehttps
+.youtube.com = forcehttps,fakehttps
+.android.com = google_hk
+www.dropbox.com = withgae
+.dropbox.com:443 = direct
+.box.com:443 = direct
+.copy.com:443 = direct
+https?://www\.google\.com/(?:imgres|url)\?.*url=([^&amp;]+) = $1
+https?://www\.google\.com\.hk/(?:imgres|url)\?.*url=([^&amp;]+) = $1
+#针对指定URL返回一个本地文件
+; https?://www\.example\.com/.+\.html = file:///C:/README.txt
+#取消注释（删除行首分号）使用 google_cn 地址作为 google 搜索
+; https?://www\.google\.com(\.[a-z]{2})?/($|(search|url|gen_204)\?|(complete|images)/) = google_cn
+#取消注释（删除行首分号）播放youtube上地区限制的vevo视频，此法可正常播放大部分vevo视频
+; https?://www\.youtube\.com/watch = google_hk
+#取消注释看直播
+; .c.youtube.com =
+; .youtube.com = google_hk
+; .googlevideo.com =
+
+[profile/ipv6]
+dns = 2001:4860:4860::8888|2001:4860:4860::8844|2001:470:20::2
+play.google.com = withgae
+talk.google.com =
+talk.l.google.com =
+talkx.l.google.com =
+.google.com = google_ipv6
+.googleusercontent.com = google_ipv6
+.googleapis.com = google_ipv6
+.google-analytics.com = google_ipv6
+.googlecode.com = google_ipv6
+.google.com.hk = google_ipv6
+.googlegroups.com = google_ipv6
+.googlesource.com = google_ipv6
+.appspot.com = google_ipv6
+.android.com = google_ipv6
+.dropbox.com:443 =
+.box.com:443 =
+.copy.com:443 =
+.ytimg.com = google_ipv6
+; .youtube.com =
+; .googlevideo.com =
+; https?://www\.youtube\.com/watch = google_hk
+
+#代理自动配置脚本(Proxy auto-config)设定
+[pac]
+#是否启用，若启用，浏览器代理自动配置地址填http://127.0.0.1:8086/proxy.pac
+enable = 1
+# pacserver的监听地址
+ip = 127.0.0.1
+port = 8086
+# pac文件的名称
+file = proxy.pac
+#被墙规则订阅地址
+gfwlist = http://autoproxy-gfwlist.googlecode.com/svn/trunk/gfwlist.txt
+#广告拦截规则订阅地址
+adblock = http://adblock-chinalist.googlecode.com/svn/trunk/adblock.txt
+#自动更新间隔时间
+expired = 86400
+
+#对应php server 的设置
+[php]
+enable = 0
+password = 123456
+crlf = 0
+validate = 0
+listen = 127.0.0.1:8089
+fetchserver = https://.cm/
+
+#二级代理,一般内网会用到
+[proxy]
+#是否启用
+enable = 0
+autodetect = 1
+#代理服务器地址
+host = 10.64.1.63
+#代理服务器端口
+port = 8080
+#代理服务器登录用户名
+username = username
+#密码
+password = 123456
+
+# 自动分段下载，需远程服务器支持Rang
+[autorange]
+#匹配以下域名时自动下载
+hosts = *.c.youtube.com|*.atm.youku.com|*.googlevideo.com|*av.vimeo.com|smile-*.nicovideo.jp|video.*.fbcdn.net|s*.last.fm|x*.last.fm|*.x.xvideos.com|*.edgecastcdn.net|*.d.rncdn3.com|cdn*.public.tube8.com|videos.flv*.redtubefiles.com|cdn*.public.extremetube.phncdn.com|cdn*.video.pornhub.phncdn.com|*.mms.vlog.xuite.net|vs*.thisav.com|archive.rthk.hk|video*.modimovie.com|*.c.docs.google.com
+# 自动对列表中文件类型启用分段下载功能
+endswith = .f4v|.flv|.hlv|.m4v|.mp4|.mp3|.ogg|.avi|.exe|.zip|.iso|.rar|.bz2|.xz|.dmg
+# 禁用分段下载的文件类型
+noendswith = .xml|.json|.html|.php|.py|.js|.css|.jpg|.jpeg|.png|.gif|.ico|.webp
+# 线程数
+threads = 3
+#一次最大下载量
+maxsize = 1048576
+#首次读写量
+waitsize = 524288
+#后续读写量
+bufsize = 8192
+
+#DNS模块，可以用来防止DNS劫持/污染
+[dns]
+enable = 0
+#DNS监听地址，使用时将系统DNS设置为127.0.0.1
+listen = 127.0.0.1:53
+#远程DNS查询服务器
+remote = 8.8.8.8|8.8.4.4|114.114.114.114|114.114.115.115
+#缓存大小
+cachesize = 5000
+#超时时间
+timeout = 2
+
+#模拟用户浏览器类型,在User-Agent里提交给服务器你的浏览器操作系统等信息
+[useragent]
+#是否启用
+enable = 0
+#可自行修改的，前提是你知道怎么改
+string = Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3
+
+[fetchmax]
+local =
+server =
+
+#不用理会,显示在控制台上方的公益广告
+[love]
+#不愿意看到这广告就把1改成0
+enable = 1
+timestamp = 1347983481
+tip = \u8bf7\u5173\u6ce8\u5317\u4eac\u5931\u5b66\u513f\u7ae5~~</pre><ul><li>纯IPv6设置方法 </li><ul><li><tt>profile = ipv6</tt>并注释<tt>[iplist]</tt>中google_cn、google_hk行 </li></ul><li>如何播放youtube上地区限制的vevo视频，此法可正常播放大部分vevo视频 </li><ul><li>删除<tt>;https?://www\.youtube\.com/watch = google_hk</tt>前的‘;’注释 </li></ul></ul>
+ </div>
+ </div>
+ </td></tr><tr>
+</tr></tbody></table>
+ </div>
+
+
+ 
+ 
+ 
+ <form name="delcom" action="https://code.google.com/p/goagent/w/delComment.do" method="POST">
+ <input type="hidden" name="sequence_num" value="">
+ <input type="hidden" name="create_time" value="">
+ <input type="hidden" name="mode" value="">
+ <input type="hidden" name="pagename" value="ConfigIntroduce">
+ <input type="hidden" name="token" value="ABZ6GAcdpop7DcdRKZgA7T2C8O9FKiRwrA:1411361540262">
+ </form>
+
+
+ <script src="https://ssl.gstatic.com/codesite/ph/16315335801608708296/js/prettify/prettify.js"></script>
+ <script type="text/javascript">
+ prettyPrint();
+ </script>
+
+<script type="text/javascript" src="https://ssl.gstatic.com/codesite/ph/16315335801608708296/js/dit_scripts.js"></script>
+
+
+
+  
+ 
+ 
+ <script type="text/javascript" src="https://ssl.gstatic.com/codesite/ph/16315335801608708296/js/ph_core.js"></script>
+ 
+ <script type="text/javascript" src="https://ssl.gstatic.com/codesite/ph/16315335801608708296/js/ph_dwiki.js"></script>
+ 
+ 
+ 
+ 
+</div> 
+
+<div id="footer" dir="ltr">
+ <div class="text">
+ <a href="https://code.google.com/projecthosting/terms.html">Terms</a> -
+ <a href="http://www.google.com/privacy.html">Privacy</a> -
+ <a href="https://code.google.com/p/support/">Project Hosting Help</a>
+ </div>
+</div>
+ <div class="hostedBy" style="margin-top: -20px;">
+ <span style="vertical-align: top;">Powered by <a href="http://code.google.com/projecthosting/">Google Project Hosting</a></span>
+ </div>
+
+ 
+ 
+
+
+ 
+ 
+
+
+
+</body></html>
