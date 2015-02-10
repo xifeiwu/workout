@@ -32,3 +32,5 @@ iptables -A INPUT -i eth0 -p tcp --dport 3306 -j ACCEPT
 # ping
 iptables -A INPUT -p icmp -m state --state ESTABLISHED,RELATED -j ACCEPT
 iptables -A INPUT -i eth0 -p icmp -j ACCEPT
+
+/etc/init.d/iptables save
