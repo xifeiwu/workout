@@ -16,8 +16,8 @@ fi
 
 CUR_PATH=$(cd "$(dirname $0)"; pwd)
 
-echo start: $SCRIPT_TOP_PATH/$0
-echo SCRIPT: $0
+echo startstart shell : $SCRIPT_TOP_PATH/$0
+echo CUR_PATH: $CUR_PATH
 echo LIVECD_PATH: $LIVECD_PATH
 
 
