@@ -1,16 +1,26 @@
 #!/bin/sh
+#$1: path of script top dir.
 set -e
-echo $OSNAME
-return 0
+
 if [ -z "$1" ] ; then
     echo error: No outpath setting at first param.
-    exit -1
+    exit 1
+fi
+SCRIPT_TOP_PATH=$1
+if [ -f $SCRIPT_TOP_PATH/config.sh ]; then
+    source $SCRIPT_TOP_PATH/config.sh
+else
+    echo error: $SCRIPT_TOP_PATH/config.sh does not exist.
+    exit 2
 fi
 
-OUTPATH=$1
-LIVECDPATH=$(cd "$(dirname $0)"; pwd)
-. $LIVECDPATH/../set_version.sh
-isodir=$OSNAME
+CUR_PATH=$(cd "$(dirname $0)"; pwd)
+
+echo start: $SCRIPT_TOP_PATH/$0
+echo SCRIPT: $0
+echo LIVECD_PATH: $LIVECD_PATH
+
+
 if [ ! $OSVERSION ] ; then
     echo Error: no OSVERSION env set.
     exit -1
@@ -20,40 +30,40 @@ if [ ! $OSVERSIONFULLNAME ] ; then
     exit -1
 fi
 
-if [ ! -d $OUTPATH/$isodir/casper ] ; then
-    mkdir -p $OUTPATH/$isodir/casper
+if [ ! -d $LIVECD_PATH/casper ] ; then
+    mkdir -p $LIVECD_PATH/casper
     #echo error: there is no $isodir path
     #exit -1
 fi
 
-if [ ! -z $OUTPATH/$isodir/isolinux ] ; then
-    rm -rf $OUTPATH/$isodir/isolinux
+if [ ! -z $LIVECD_PATH/isolinux ] ; then
+    rm -rf $LIVECD_PATH/isolinux
 fi
-mkdir $OUTPATH/$isodir/isolinux
-if [ ! -z $OUTPATH/$isodir/preseed ] ; then
-    rm -rf $OUTPATH/$isodir/preseed
+mkdir $LIVECD_PATH/isolinux
+if [ ! -z $LIVECD_PATH/preseed ] ; then
+    rm -rf $LIVECD_PATH/preseed
 fi
-mkdir $OUTPATH/$isodir/preseed
-if [ ! -z $OUTPATH/$isodir/.disk ] ; then
-    rm -rf $OUTPATH/$isodir/.disk
+mkdir $LIVECD_PATH/preseed
+if [ ! -z $LIVECD_PATH/.disk ] ; then
+    rm -rf $LIVECD_PATH/.disk
 fi
-mkdir $OUTPATH/$isodir/.disk
+mkdir $LIVECD_PATH/.disk
 
-cp $LIVECDPATH/files/isolinux/16x16.fnt $OUTPATH/$isodir/isolinux
-cp $LIVECDPATH/files/isolinux/boot.cat $OUTPATH/$isodir/isolinux
-cp $LIVECDPATH/files/isolinux/en.hlp $OUTPATH/$isodir/isolinux
-cp $LIVECDPATH/files/isolinux/en.tr $OUTPATH/$isodir/isolinux
-cp $LIVECDPATH/files/isolinux/gfxboot.c32 $OUTPATH/$isodir/isolinux
-cp $LIVECDPATH/files/isolinux/isolinux.bin $OUTPATH/$isodir/isolinux
-cp $LIVECDPATH/files/isolinux/memtest86+-5.01.bin $OUTPATH/$isodir/isolinux/memtest
-cp $LIVECDPATH/files/isolinux/message $OUTPATH/$isodir/isolinux
-cp $LIVECDPATH/files/isolinux/vesamenu.c32 $OUTPATH/$isodir/isolinux
-cp $LIVECDPATH/files/isolinux/back.jpg $OUTPATH/$isodir/isolinux
-cp $LIVECDPATH/files/isolinux/zh_CN.hlp $OUTPATH/$isodir/isolinux
-cp $LIVECDPATH/files/isolinux/zh_CN.tr $OUTPATH/$isodir/isolinux
+cp $CUR_PATH/files/isolinux/16x16.fnt $LIVECD_PATH/isolinux
+cp $CUR_PATH/files/isolinux/boot.cat $LIVECD_PATH/isolinux
+cp $CUR_PATH/files/isolinux/en.hlp $LIVECD_PATH/isolinux
+cp $CUR_PATH/files/isolinux/en.tr $LIVECD_PATH/isolinux
+cp $CUR_PATH/files/isolinux/gfxboot.c32 $LIVECD_PATH/isolinux
+cp $CUR_PATH/files/isolinux/isolinux.bin $LIVECD_PATH/isolinux
+cp $CUR_PATH/files/isolinux/memtest86+-5.01.bin $LIVECD_PATH/isolinux/memtest
+cp $CUR_PATH/files/isolinux/message $LIVECD_PATH/isolinux
+cp $CUR_PATH/files/isolinux/vesamenu.c32 $LIVECD_PATH/isolinux
+cp $CUR_PATH/files/isolinux/back.jpg $LIVECD_PATH/isolinux
+cp $CUR_PATH/files/isolinux/zh_CN.hlp $LIVECD_PATH/isolinux
+cp $CUR_PATH/files/isolinux/zh_CN.tr $LIVECD_PATH/isolinux
 
 adtxtstr=""
-echo "$adtxtstr" > $OUTPATH/$isodir/isolinux/adtxt.cfg
+echo "$adtxtstr" > $LIVECD_PATH/isolinux/adtxt.cfg
 
 dtmenustr="menu hshift 9
 menu width 58
@@ -108,13 +118,13 @@ menu begin desktop
     menu end
 menu end
 "
-echo "$dtmenustr" > $OUTPATH/$isodir/isolinux/dtmenu.cfg
+echo "$dtmenustr" > $LIVECD_PATH/isolinux/dtmenu.cfg
 
 exithelpstr="label menu
 	kernel vesamenu.c32
 	config isolinux.cfg
 "
-echo "$exithelpstr" > $OUTPATH/$isodir/isolinux/exithelp.cfg
+echo "$exithelpstr" > $LIVECD_PATH/isolinux/exithelp.cfg
 
 gfxbootstr="foreground=0xFFFFFF
 background=0x60C1F8
@@ -128,7 +138,7 @@ label oem=OEM install (for manufacturers)
 append oem=oem-config/enable=true
 applies oem=live live-install install
 "
-echo "$gfxbootstr" > $OUTPATH/$isodir/isolinux/gfxboot.cfg
+echo "$gfxbootstr" > $LIVECD_PATH/isolinux/gfxboot.cfg
 
 cfgstr="# D-I config version 2.0
 include menu.cfg
@@ -137,16 +147,16 @@ prompt 0
 timeout 50
 ui gfxboot message
 "
-echo "$cfgstr" > $OUTPATH/$isodir/isolinux/isolinux.cfg
+echo "$cfgstr" > $LIVECD_PATH/isolinux/isolinux.cfg
 
 langstr="zh_CN
 "
-echo "$langstr" > $OUTPATH/$isodir/isolinux/lang
+echo "$langstr" > $LIVECD_PATH/isolinux/lang
 
 langliststr="en
 zh_CN
 "
-echo "$langliststr" > $OUTPATH/$isodir/isolinux/langlist
+echo "$langliststr" > $LIVECD_PATH/isolinux/langlist
 
 menustr="menu hshift 13
 menu width 49
@@ -164,13 +174,13 @@ menu begin advanced
 	include adtxt.cfg
 menu end
 "
-echo "$menustr" > $OUTPATH/$isodir/isolinux/menu.cfg
+echo "$menustr" > $LIVECD_PATH/isolinux/menu.cfg
 
 po4astr="[po4a_langs] zh_CN zh_TW
 [po4a_paths] po/help.pot $lang:po/$lang.po
 [type:docbook] help.xml
 "
-echo "$po4astr" > $OUTPATH/$isodir/isolinux/po4a.cfg
+echo "$po4astr" > $LIVECD_PATH/isolinux/po4a.cfg
 
 promptstr="prompt 1
 display f1.txt
@@ -188,7 +198,7 @@ f7 f7.txt
 f8 f8.txt
 f9 f9.txt
 "
-echo "$promptstr" >  $OUTPATH/$isodir/isolinux/prompt.cfg
+echo "$promptstr" >  $LIVECD_PATH/isolinux/prompt.cfg
 
 stdmenustr="menu background splash.png
 menu color title	* #FFFFFFFF *
@@ -206,7 +216,7 @@ menu timeoutrow 16
 menu tabmsgrow 18
 menu tabmsg Press ENTER to boot or TAB to edit a menu entry
 "
-echo "$stdmenustr" > $OUTPATH/$isodir/isolinux/stdmenu.cfg
+echo "$stdmenustr" > $LIVECD_PATH/isolinux/stdmenu.cfg
 
 txtstr="default live
 label live
@@ -228,7 +238,7 @@ label hd
   menu label ^Boot from first hard disk
   localboot 0x80
 "
-echo "$txtstr" > $OUTPATH/$isodir/isolinux/txt.cfg
+echo "$txtstr" > $LIVECD_PATH/isolinux/txt.cfg
 
 seed="# Language and country.
 d-i 	debian-installer/locale string zh_CN.UTF-8
@@ -257,11 +267,13 @@ d-i	pkgsel/language-packs string
 # Don't show summary before install
 ubiquity ubiquity/summary note
 #ubiquity ubiquity/reboot boolean true"
-echo "$seed" > $OUTPATH/$isodir/preseed/$OSNAME.seed
+echo "$seed" > $LIVECD_PATH/preseed/$OSNAME.seed
 
-echo full_cd/single > $OUTPATH/$isodir/.disk/cd_type
-echo $OSFULLNAME $OSVERSION "$OSVERSIONFULLNAME" - Release i386 \(`date +%Y%m%d`\) > $OUTPATH/$isodir/.disk/info
-echo $OSFULLNAME $OSVERSION "$OSVERSIONFULLNAME" - Release i386 \(`date +%Y%m%d`\) > $OUTPATH/$isodir/.disk/mint4win
-touch $OUTPATH/$isodir/.disk/release_notes_url
-echo 423b762a-38e0-4f2d-8632-459f826c6699 > $OUTPATH/$isodir/.disk/casper-uuid-generic
-echo 423b762a-38e0-4f2d-8632-459f826c6699 > $OUTPATH/$isodir/.disk/live-uuid-generic
+echo full_cd/single > $LIVECD_PATH/.disk/cd_type
+echo $OSFULLNAME $OSVERSION "$OSVERSIONFULLNAME" - Release i386 \(`date +%Y%m%d`\) > $LIVECD_PATH/.disk/info
+echo $OSFULLNAME $OSVERSION "$OSVERSIONFULLNAME" - Release i386 \(`date +%Y%m%d`\) > $LIVECD_PATH/.disk/mint4win
+touch $LIVECD_PATH/.disk/release_notes_url
+echo 423b762a-38e0-4f2d-8632-459f826c6699 > $LIVECD_PATH/.disk/casper-uuid-generic
+echo 423b762a-38e0-4f2d-8632-459f826c6699 > $LIVECD_PATH/.disk/live-uuid-generic
+
+echo success: $SCRIPT_TOP_PATH/isolinux/create_livecd.sh
