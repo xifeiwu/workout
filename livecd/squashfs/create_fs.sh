@@ -12,10 +12,10 @@ else
     echo error: $SCRIPT_TOP_PATH/config.sh does not exist.
     exit 2
 fi
-
+CUR_SCRIPT=$SCRIPT_TOP_PATH/$0
 CUR_PATH=$(cd "$(dirname $0)"; pwd)
 
-echo start shell script: $SCRIPT_TOP_PATH/$0
+notice CUR_SCRIPT: $CUR_SCRIPT
 echo CUR_PATH: $CUR_PATH
 echo ROOTFS_PATH: $ROOTFS_PATH
 echo OSARCH: $OSARCH
@@ -52,13 +52,21 @@ function mrootbuilder()
         echo ERROR: dir $ROOTFS_PATH has not exist.
         return 1
     fi
-    sudo mount --bind /dev $ROOTFS_PATH/dev
+    if [ ! -d $CUR_PATH/apt/sources.list.d -o ! -d $CUR_PATH/apt/preferences.d ]; then
+        echo dir $CUR_PATH/apt/sources.list.d or $CUR_PATH/apt/preferences.d does not exist.
+        return 2
+    fi
+
+
+    sudo cp -r $CUR_PATH/apt/sources.list.d $ROOTFS_PATH/etc/apt/
+    sudo cp -r $CUR_PATH/apt/preferences.d $ROOTFS_PATH/etc/apt/
     #sudo cp /etc/hosts $ROOTFS_PATH/etc/hosts
     #sudo cp /etc/resolv.conf $ROOTFS_PATH/etc/resolv.conf
     #sudo cp $T/build/core/srcbuild/official-package-repositories.list $ROOTFS_PATH/etc/apt/sources.list
     #sudo cp $T/build/core/srcbuild/preferences $ROOTFS_PATH/etc/apt/preferences
     #sudo cp $T/build/core/srcbuild/99myown $ROOTFS_PATH/etc/apt/apt.conf.d/99myown
 
+    sudo mount --bind /dev $ROOTFS_PATH/dev
     #backup /sbin/initctl in squashfs-root
     sudo chroot $ROOTFS_PATH /bin/bash -c "sudo cp /sbin/initctl /sbin/initctl.bak"
     sudo chroot $ROOTFS_PATH /bin/bash -c "mount none -t proc /proc"
@@ -89,13 +97,17 @@ function mrootbuilder()
     while read list
     do
         pkgsname=`echo $list | awk '{print $1}'`
-        echo DEBIAN_FRONTEND=noninteractive apt-get install --yes --allow-unauthenticated ${pkgsname}
+        if [ ${pkgsname:0:1} == "#" ]; then
+            notice package $pkgsname is ignored.
+            continue
+        fi
+        notice DEBIAN_FRONTEND=noninteractive apt-get install --yes --allow-unauthenticated ${pkgsname}
         sudo chroot $ROOTFS_PATH /bin/bash -c "DEBIAN_FRONTEND=noninteractive apt-get install --yes --allow-unauthenticated ${pkgsname}"
         if [ $? -ne 0 ];then
                 echo $pkgsname >>  $CUR_PATH/fail_stage1
         fi
     done < $CUR_PATH/filesystem.manifest
-
+#return 4
     # stage 2
     echo "------------------------------stage2------------------------------------------"
     while read pkgsname
@@ -161,27 +173,79 @@ function intkernel()
     sudo chroot $ROOTFS_PATH /bin/bash -c "rm -rf /lib/modules/${KERNEL_VERSION_FULL}/kernel && rm -rf /lib/modules/${KERNEL_VERSION_FULL}/modules.dep"
     sudo chroot $ROOTFS_PATH /bin/bash -c "dpkg -i linux-image-${KERNEL_VERSION_FULL}*.deb linux-headers-${KERNEL_VERSION_FULL}*.deb"
     sudo chroot $ROOTFS_PATH /bin/bash -c "dpkg --purge linux-generic linux-headers-generic linux-image-generic linux-headers-3.8.0-19-generic linux-headers-3.8.0-19 linux-image-extra-3.8.0-19-generic linux-image-3.8.0-19-generic"
-   sudo chroot $ROOTFS_PATH /bin/bash -c "rm -rf /home/*"
-   sudo chroot $ROOTFS_PATH /bin/bash -c "update-initramfs -u"
+    sudo chroot $ROOTFS_PATH /bin/bash -c "rm -rf /home/*"
+    sudo chroot $ROOTFS_PATH /bin/bash -c "update-initramfs -u"
 
-   sudo rm $ROOTFS_PATH/linux-headers-${KERNEL_VERSION_FULL}*.deb
-   sudo rm $ROOTFS_PATH/linux-image-${KERNEL_VERSION_FULL}*.deb
+    sudo rm $ROOTFS_PATH/linux-headers-${KERNEL_VERSION_FULL}*.deb
+    sudo rm $ROOTFS_PATH/linux-image-${KERNEL_VERSION_FULL}*.deb
 
-   echo "replace kernel successfull !"
+    echo "replace kernel successfull !"
 }
 
 function createfs()
 {
+    step=0
+
+    warning $CUR_SCRIPT. step $step. checktools
     checktools || return 1
-    if [ -d $ROOTFS_PATH ]; then
-        echo dir $ROOTFS_PATH has exist. May be debootstrap has executed.
-    else
-    	mroot || return 1
-    fi
-    mrootbuilder
+
+    ((step++))
+    while true
+    do
+        warning $CUR_SCRIPT. step $step. mroot
+        read -p "Go On[Y/n]?" yn
+        if [ -z ${yn} ]; then
+            continue
+        fi
+        if [ "${yn}" == "y" ]; then
+            if [ -d $ROOTFS_PATH ]; then
+                warning dir $ROOTFS_PATH has exist. May be debootstrap has executed.
+            else
+    	          mroot || return 2
+            fi
+            break
+        elif [ "${yn}" == "n" ]; then
+            notice ignore mroot.
+            break
+        fi
+    done
+
+    ((step++))
+    while true
+    do
+        warning $CUR_SCRIPT. step $step. mrootbuilder
+        read -p "Go On[Y/n]?" yn
+        if [ -z ${yn} ]; then
+            continue
+        fi
+        if [ "${yn}" == "y" ]; then
+            mrootbuilder
+            break
+        elif [ "${yn}" == "n" ]; then
+            notice ignore mrootbuilder.
+            break
+        fi
+    done
     #mountdir
     #intkernel
-    cpkernel
+
+    ((step++))
+    while true
+    do
+        warning $CUR_SCRIPT. step $step. cpkernel
+        read -p "Go On[Y/n]?" yn
+        if [ -z ${yn} ]; then
+            continue
+        fi
+        if [ "${yn}" == "y" ]; then
+            cpkernel
+            break
+        elif [ "${yn}" == "n" ]; then
+            notice ignore cpkernel.
+            break
+        fi
+    done
+    #
 }
 function cpkernel()
 {
@@ -189,7 +253,7 @@ function cpkernel()
         mkdir -p $LIVECD_PATH/casper
     fi
     sudo chroot $ROOTFS_PATH /bin/bash -c "update-initramfs -u"
-    KERNEL_VERSION_FULL=3.13.0-24-generic
+    KERNEL_VERSION_FULL=3.13.0-37-generic
     sudo cp $ROOTFS_PATH/boot/vmlinuz-${KERNEL_VERSION_FULL} $LIVECD_PATH/casper/vmlinuz || return 1
     sudo cp $ROOTFS_PATH/boot/initrd.img-${KERNEL_VERSION_FULL} $LIVECD_PATH/casper/initrd.lz || return 1
 }

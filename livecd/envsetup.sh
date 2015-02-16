@@ -43,9 +43,73 @@ function unmountdir()
         sudo umount ${ROOTFS_PATH}/proc
     fi
 }
+function unmountsquashfs()
+{
+    sudo chroot $ROOTFS_PATH /bin/bash -c "umount -lf /proc"
+    sudo chroot $ROOTFS_PATH /bin/bash -c "umount -lf /sys"
+    sudo chroot $ROOTFS_PATH /bin/bash -c "umount -lf /dev/pts"
+    sudo umount -l $ROOTFS_PATH/dev
+}
 function start()
 {
-    sudo sh squashfs/create_fs.sh $SCRIPT_TOP_PATH
-    #sudo sh isolinux/create_livecd.sh $SCRIPT_TOP_PATH
+    while true
+    do
+        warning sudo sh squashfs/create_fs.sh $SCRIPT_TOP_PATH
+        read -p "Go On[Y/n]?" yn
+        if [ -z ${yn} ]; then
+            continue
+        fi
+        if [ "${yn}" == "y" ]; then
+            sudo sh squashfs/create_fs.sh $SCRIPT_TOP_PATH
+            if [ ! $?  -eq 0 ]; then
+                error stop at squashfs/create_fs.sh
+                return 1
+            fi
+            break
+        elif [ "${yn}" == "n" ]; then
+            notice ignore mroot.
+            break
+        fi
+    done
+
+    while true
+    do
+        warning sudo sh isolinux/create_livecd.sh $SCRIPT_TOP_PATH
+        read -p "Go On[Y/n]?" yn
+        if [ -z ${yn} ]; then
+            continue
+        fi
+        if [ "${yn}" == "y" ]; then
+            sudo sh isolinux/create_livecd.sh $SCRIPT_TOP_PATH
+            if [ ! $?  -eq 0 ]; then
+                error stop at isolinux/create_livecd.sh
+            return 1
+            fi
+            break
+        elif [ "${yn}" == "n" ]; then
+            notice ignore mroot.
+            break
+        fi
+    done
+
+    while true
+    do
+        warning sudo sh mkiso.sh $SCRIPT_TOP_PATH
+        read -p "Go On[Y/n]?" yn
+        if [ -z ${yn} ]; then
+            continue
+        fi
+        if [ "${yn}" == "y" ]; then
+            sudo sh mkiso.sh $SCRIPT_TOP_PATH
+            if [ ! $?  -eq 0 ]; then
+                error stop at mkiso.sh
+                return 1
+            fi
+            break
+        elif [ "${yn}" == "n" ]; then
+            notice ignore mroot.
+            break
+        fi
+    done
 }
 setenv

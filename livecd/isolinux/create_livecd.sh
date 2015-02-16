@@ -13,10 +13,10 @@ else
     echo error: $SCRIPT_TOP_PATH/config.sh does not exist.
     exit 2
 fi
-
+CUR_SCRIPT=$SCRIPT_TOP_PATH/$0
 CUR_PATH=$(cd "$(dirname $0)"; pwd)
 
-echo startstart shell : $SCRIPT_TOP_PATH/$0
+notice CUR_SCRIPT: $CUR_SCRIPT
 echo CUR_PATH: $CUR_PATH
 echo LIVECD_PATH: $LIVECD_PATH
 
@@ -276,4 +276,4 @@ touch $LIVECD_PATH/.disk/release_notes_url
 echo 423b762a-38e0-4f2d-8632-459f826c6699 > $LIVECD_PATH/.disk/casper-uuid-generic
 echo 423b762a-38e0-4f2d-8632-459f826c6699 > $LIVECD_PATH/.disk/live-uuid-generic
 
-echo success: $SCRIPT_TOP_PATH/isolinux/create_livecd.sh
+notice Success: $SCRIPT_TOP_PATH/isolinux/create_livecd.sh
