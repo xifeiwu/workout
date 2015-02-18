@@ -19,7 +19,7 @@ function checktools()
 
 
 #mountdir first.!!!
-#ln -s /usr/src/linux-headers-3.13.0-24-generic/ /lib/modules/3.13.0-24-generic/buil
+#ln -s /usr/src/linux-headers-3.13.0-24-generic/ /lib/modules/3.13.0-24-generic/build
 
 function mountdir()
 {
@@ -43,12 +43,19 @@ function unmountdir()
         sudo umount ${ROOTFS_PATH}/proc
     fi
 }
+function mountsquashfs()
+{
+    sudo mount --bind /dev $ROOTFS_PATH/dev
+    sudo chroot $ROOTFS_PATH /bin/bash -c "mount none -t proc /proc"
+    sudo chroot $ROOTFS_PATH /bin/bash -c "mount none -t sysfs /sys"
+    sudo chroot $ROOTFS_PATH /bin/bash -c "mount none -t devpts /dev/pts"
+}
 function unmountsquashfs()
 {
+    sudo umount -l $ROOTFS_PATH/dev
     sudo chroot $ROOTFS_PATH /bin/bash -c "umount -lf /proc"
     sudo chroot $ROOTFS_PATH /bin/bash -c "umount -lf /sys"
     sudo chroot $ROOTFS_PATH /bin/bash -c "umount -lf /dev/pts"
-    sudo umount -l $ROOTFS_PATH/dev
 }
 function start()
 {
