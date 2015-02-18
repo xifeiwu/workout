@@ -1,5 +1,11 @@
+start shell script: /home/cos/Public/huffie/ccustom/livecd/squashfs/squashfs/create_fs.sh
+CUR_PATH: /home/cos/Public/huffie/ccustom/livecd/squashfs
+ROOTFS_PATH: /home/cos/distro/squashfs-root
+OSARCH: i386
+BASE_RELEASE: trusty
+LIVECD_PATH: /home/cos/distro/mylinux
 Begin to debootstrap...
-sudo debootstrap --arch=i386 --no-check-gpg trusty /home/cos/linux/squashfs-root http://192.168.160.169/cos3/ubuntu/
+sudo debootstrap --arch=i386 --no-check-gpg trusty /home/cos/distro/squashfs-root http://192.168.160.169/cos3/ubuntu/
 I: Retrieving Release 
 I: Retrieving Packages 
 I: Validating Packages 

@@ -74,7 +74,7 @@ function start()
             fi
             break
         elif [ "${yn}" == "n" ]; then
-            notice ignore mroot.
+            notice ignore squashfs/create_fs.sh
             break
         fi
     done
@@ -94,7 +94,7 @@ function start()
             fi
             break
         elif [ "${yn}" == "n" ]; then
-            notice ignore mroot.
+            notice ignore isolinux/create_livecd.sh
             break
         fi
     done
@@ -114,7 +114,7 @@ function start()
             fi
             break
         elif [ "${yn}" == "n" ]; then
-            notice ignore mroot.
+            notice ignore mkiso.sh.
             break
         fi
     done

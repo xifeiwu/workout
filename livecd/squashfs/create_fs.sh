@@ -228,33 +228,6 @@ function createfs()
     done
     #mountdir
     #intkernel
+}
 
-    ((step++))
-    while true
-    do
-        warning $CUR_SCRIPT. step $step. cpkernel
-        read -p "Go On[Y/n]?" yn
-        if [ -z ${yn} ]; then
-            continue
-        fi
-        if [ "${yn}" == "y" ]; then
-            cpkernel
-            break
-        elif [ "${yn}" == "n" ]; then
-            notice ignore cpkernel.
-            break
-        fi
-    done
-    #
-}
-function cpkernel()
-{
-    if [ ! -d $LIVECD_PATH/casper ] ; then
-        mkdir -p $LIVECD_PATH/casper
-    fi
-    sudo chroot $ROOTFS_PATH /bin/bash -c "update-initramfs -u"
-    KERNEL_VERSION_FULL=3.13.0-37-generic
-    sudo cp $ROOTFS_PATH/boot/vmlinuz-${KERNEL_VERSION_FULL} $LIVECD_PATH/casper/vmlinuz || return 1
-    sudo cp $ROOTFS_PATH/boot/initrd.img-${KERNEL_VERSION_FULL} $LIVECD_PATH/casper/initrd.lz || return 1
-}
 createfs
