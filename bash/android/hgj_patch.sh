@@ -34,59 +34,51 @@ function run_patch(){
 function patch_android15()
 {
 
-run_patch -p0 -d ${ANDROID}/packages -i ${PATCH15}/PATCH/0001-apps.patch
-# account an error when use p0 and ${ANDROID}
-run_patch -p1 -d ${ANDROID}/dalvik -i ${PATCH15}/PATCH/0002-dalvik.patch
-run_patch -p0 ${ANDROID}/build/target/productcore.mk -i ${PATCH15}/PATCH/0003-product-core.patch
-run_patch -p0 -d ${ANDROID}/frameworks -i ${PATCH15}/PATCH/0004-framework_base.patch
-
-#pushd frameworks/base
-#git am ${PATCH15}/BatteryStatsImpl.java.patch
-#popd
-#cd WORKING_DIRECTORY/packages/apps
-#patch -p1  < 0001-apps.patch
-#cd WORKING_DIRECTORY/dalvik
-#patch -p1 < 0002-dalvik.patch
-#cd WORKING_DIRECTORY/build/target/product
-#patch -p0 core.mk < 0003-product-core.patch
-#cd WORKING_DIRECTORY/frameworks/base
-#patch -p1 < 0004-framework_base.patch
+    run_patch -p0 -d ${ANDROID}/packages -i ${PATCH15}/PATCH/0001-apps.patch
+    # account an error when use p0 and ${ANDROID}
+    run_patch -p1 -d ${ANDROID}/dalvik -i ${PATCH15}/PATCH/0002-dalvik.patch
+    run_patch -p0 ${ANDROID}/build/target/productcore.mk -i ${PATCH15}/PATCH/0003-product-core.patch
+    run_patch -p0 -d ${ANDROID}/frameworks -i ${PATCH15}/PATCH/0004-framework_base.patch
+    #pushd frameworks/base
+    #git am ${PATCH15}/BatteryStatsImpl.java.patch
+    #popd
 }
+
 function patch_android20_kernel()
 {
-if [ ! -d ${PATCH20}/patch_for_Jan ]; then
-    echo ${PATCH20}/patch_for_Jan does not exist.
-    return 0
-fi
-if [ ! -d ${PATCH20}/patch_for_Jan-0day ]; then
-    echo ${PATCH20}/patch_for_Jan-0day does not exist.
-    return 1
-fi
-if [ ! -d ${PATCH20}/patch_for_Feb ]; then
-    echo ${PATCH20}/patch_for_Feb does not exist.
-    return 2
-fi
-for file in `find ${PATCH20}/patch_for_Jan -type f`
-do
-    run_patch -p1 -d ${KERNEL} -i $file
-done
-for file in `find ${PATCH20}/patch_for_Jan-0day -type f`
-do
-    run_patch -p1 -d ${KERNEL} -i $file
-done
-for file in `find ${PATCH20}/patch_for_Feb -type f`
-do
-    run_patch -p1 -d ${KERNEL} -i $file
-done
+    if [ ! -d ${PATCH20}/patch_for_Jan ]; then
+        echo ${PATCH20}/patch_for_Jan does not exist.
+        return 0
+    fi
+    if [ ! -d ${PATCH20}/patch_for_Jan-0day ]; then
+        echo ${PATCH20}/patch_for_Jan-0day does not exist.
+        return 1
+    fi
+    if [ ! -d ${PATCH20}/patch_for_Feb ]; then
+        echo ${PATCH20}/patch_for_Feb does not exist.
+        return 2
+    fi
+    for file in `find ${PATCH20}/patch_for_Jan -type f`
+    do
+        run_patch -p1 -d ${KERNEL} -i $file
+    done
+    for file in `find ${PATCH20}/patch_for_Jan-0day -type f`
+    do
+        run_patch -p1 -d ${KERNEL} -i $file
+    done
+    for file in `find ${PATCH20}/patch_for_Feb -type f`
+    do
+        run_patch -p1 -d ${KERNEL} -i $file
+    done
 }
 
 function patch_android20_android()
 {
-if [ ! -f ${PATCH20}/华夏创新/0005-android.patch ]; then
-    echo ${PATCH20}/华夏创新/0005-android.patc does not exist.
-    return 0
-fi
-run_patch -p1 -d ${ANDROID} -i ${PATCH20}/华夏创新/0005-android.patch
+    if [ ! -f ${PATCH20}/华夏创新/0005-android.patch ]; then
+        echo ${PATCH20}/华夏创新/0005-android.patc does not exist.
+        return 0
+    fi
+    run_patch -p1 -d ${ANDROID} -i ${PATCH20}/华夏创新/0005-android.patch
 }
 
 function build_android()
@@ -155,4 +147,26 @@ function makebootimg()
     fi
 
     make bootimage
+}
+function abootimg_()
+{
+    command -v abootimg > /dev/null
+    if [ ! $? == 0 ] ; then
+        echo ERROR: abootimg has not been installed.
+        echo sudo apt-get install abootimg
+        sudo apt-get install abootimg
+    fi
+    abootimg -x boot.img
+    sed -i '/bootsize =/d' bootimg.cfg
+    abootimg --create newboot.img -f bootimg.cfg -k zImage -r initrd.img
+}
+function fastboot_img()
+{
+    adb reboot bootloader
+    sleep 10
+    fastboot -w
+    fastboot flash boot boot.img
+    fastboot flash system system.img
+    fastboot flash userdata userdata.img
+    fastboot reboot
 }
