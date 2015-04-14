@@ -7,7 +7,7 @@ $ sudo apt-get install sun-java6-jdk
 $ sudo updates-alternative --config /usr/bin/java java path/to/jdk/bin/java 300
 $ sudo update-alternative --install java
 
-注：Android编译过程中如果出现java相关错误，可能是因为jdk版本太高，经测试Android4.3使用jdk1.6.0_45会出问题，但是使用jdk1.6.0_37没有问题。
+注：Android编译过程中如果出现java相关错误，如，“某些输入文件使用或覆盖了已过时的API”。可能是因为jdk版本太高，经测试Android4.3使用jdk1.6.0_45会出问题，但是使用jdk1.6.0_37没有问题。
 
 安装必要的组件包（系统版本要求：Ubuntu 12.04或者更新）
 $ sudo apt-get install git gnupg flex bison gperf build-essential \
