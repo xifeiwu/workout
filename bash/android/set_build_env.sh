@@ -4,13 +4,18 @@
 $ sudo add-apt-repository "deb http://archive.canonical.com/ lucid partner"
 $ sudo apt-get update
 $ sudo apt-get install sun-java6-jdk
+$ sudo updates-alternative --config /usr/bin/java java path/to/jdk/bin/java 300
+$ sudo update-alternative --install java
+
+注：Android编译过程中如果出现java相关错误，可能是因为jdk版本太高，经测试Android4.3使用jdk1.6.0_45会出问题，但是使用jdk1.6.0_37没有问题。
 
 安装必要的组件包（系统版本要求：Ubuntu 12.04或者更新）
 $ sudo apt-get install git gnupg flex bison gperf build-essential \
   zip curl libc6-dev libncurses5-dev:i386 x11proto-core-dev \
   libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-glx:i386 \
   libgl1-mesa-dev g++-multilib mingw32 tofrodos \
-  python-markdown libxml2-utils xsltproc zlib1g-dev:i386
+  python-markdown libxml2-utils xsltproc zlib1g-dev:i386 \
+  libswitch-perl
 $ sudo ln -s /usr/lib/i386-linux-gnu/mesa/libGL.so.1 /usr/lib/i386-linux-gnu/libGL.so
 
 安装repo 工具
